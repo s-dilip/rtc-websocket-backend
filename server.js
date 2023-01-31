@@ -13,7 +13,7 @@ server.on("connection", (ws) => {
 
     server.clients.forEach(function each(client) {
       //Broadcast a message to all connected clients
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
+      if (client.readyState === WebSocket.OPEN) {
         client.send(message, { binary: isBinary });
       }
     });
