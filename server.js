@@ -8,8 +8,14 @@ server.on("connection", (ws) => {
 
   ws.send("Hello Client!");
 
-  ws.on("message", (message) => {
-    console.log("Recieved: " + message);
-    // messages.push({ id: 0, text: message });
+  ws.on("message", (message, isBinary) => {
+    console.log("Received: " + message);
+
+    server.clients.forEach(function each(client) {
+      //Broadcast a message to all connected clients
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(message, { binary: isBinary });
+      }
+    });
   });
 });
