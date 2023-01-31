@@ -6,7 +6,7 @@ const server = new WebSocket.Server({ port: 8080 });
 server.on("connection", (ws) => {
   console.log("New Client Connected");
 
-  ws.send("Hello Client!");
+  //   ws.send({"Hello Client!"});
 
   ws.on("message", (message, isBinary) => {
     console.log("Received: " + message);
