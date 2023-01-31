@@ -1,9 +1,14 @@
+const express = require("express");
+const app = express();
+const server = require("http").createServer(app);
+const port = process.env.PORT || 8080;
+
 const WebSocket = require("ws");
-const server = new WebSocket.Server({ port: process.env.PORT || 8080 });
+const wss = new WebSocket.Server({ server: server }); //{ port: process.env.PORT || 8080 }
 
 // let messages = [];
 
-server.on("connection", (ws) => {
+wss.on("connection", (ws) => {
   console.log("New Client Connected");
 
   //   ws.send({"Hello Client!"});
@@ -11,11 +16,15 @@ server.on("connection", (ws) => {
   ws.on("message", (message, isBinary) => {
     console.log("Received: " + message);
 
-    server.clients.forEach(function each(client) {
+    wss.clients.forEach(function each(client) {
       //Broadcast a message to all connected clients
       if (client.readyState === WebSocket.OPEN) {
         client.send(message, { binary: isBinary });
       }
     });
   });
+});
+
+server.listen(port, () => {
+  console.log(`Server online on: ws://localhost:${port}`);
 });
